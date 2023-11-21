@@ -1,17 +1,19 @@
+--похоже нид сервер
 local computer = require("computer")
-local event = require("event")
-local com = require('component')
+local event = require("event").pull
+local com = require("component")
 local run = true
 doorcontroller = require("component").os_doorcontroller
 local zona=5 -- область срабатывания
 local opn = true -- флаг открытия дверей
 
-if not com.isAvailable("os_entdetector") then
-  error("нет сенсора entity detector")
-end
+--if not com.isAvailable("os_entdetector") then
+--error("нет сенсора entity detector")
+--end
 
 local sensor = {}
-for address in com.list("os_entdetector") do
+--for address in com.list("os_entdetector") do
+for address in com.list("motion_sensor") do
   table.insert(sensor,com.proxy(address))
 end
 
@@ -40,8 +42,12 @@ local function detector()
 end
 
 print ("start")
+print (#sensor)
+ doorcontroller.open()
+ os.sleep(2)
 while run do
 pcall(detector)
+--detector()
   local e = {event(1,"key_down")}
   if e[4] == 29 then
 
@@ -52,3 +58,14 @@ pcall(detector)
 end
 
 print ("stop progr")
+
+--------------------------------------------------------------------------------------
+--/home/.shrc/home/bin/dk.lua
+echo >> /home/.shrc /home/bin/dk.lua
+
+представим,  у нас есть программа de_reactor.lua  
+для того чтобы заставить её автоматически включаться при запуске пк,
+  нужно изменить файл .shrc командой  edit .shrc
+  
+  в файле одна строчка
+  filename -- без расширения и пути
