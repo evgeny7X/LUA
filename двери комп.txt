@@ -1,0 +1,54 @@
+local computer = require("computer")
+local event = require("event")
+local com = require('component')
+local run = true
+doorcontroller = require("component").os_doorcontroller
+local zona=5 -- область срабатывания
+local opn = true -- флаг открытия дверей
+
+if not com.isAvailable("os_entdetector") then
+  error("нет сенсора entity detector")
+end
+
+local sensor = {}
+for address in com.list("os_entdetector") do
+  table.insert(sensor,com.proxy(address))
+end
+
+
+
+local function detector()
+  local users = {}
+  opn=true
+  for i = 1,#sensor do
+    local pl = sensor[i].scanPlayers(64)
+    for j = 1,#pl do
+
+        print(i.." "..math.ceil(pl[j].range)..' м')
+		if math.ceil(pl[j].range)<= zona then
+		opn = false
+		end
+	 end
+  end
+ if opn == true then
+ doorcontroller.open()
+ else
+ doorcontroller.close()
+ end
+  
+  os.sleep(1)
+end
+
+print ("start")
+while run do
+pcall(detector)
+  local e = {event(1,"key_down")}
+  if e[4] == 29 then
+
+    os.execute("cls")
+    run = false
+    os.exit()
+  end
+end
+
+print ("stop progr")
