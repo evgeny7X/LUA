@@ -16,7 +16,7 @@ statist.txt<br>
 LUA scripts.txt<br>
 DOOR.txt<br>
 двери комп.txt<br>
-baton1.txt      ---   робот робот, летает по кругу<br>
+baton1.txt      ---    летает по кругу робот<br>
 зарядная комната.txt   ---       при наличии игрока в комнате закрывает двери<br>
 arts.txt --- ASCII Картинки<br>
 варп.txt<br>
