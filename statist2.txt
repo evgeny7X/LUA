@@ -1,0 +1,12 @@
+-- ============================  --
+local component = require("component")
+local event = require("event")
+local m = component.modem
+
+m.open(67)
+     while true do
+        local _, _, _, _, _, msg = event.pull("modem_message")
+		 sp=tostring(msg)
+		 print (sp)
+		 print ("*")
+		 end

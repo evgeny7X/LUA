@@ -1,0 +1,108 @@
+--РАБОЧАЯ ВЕРСИЯ КОНТРОЛЯ ДВЕРЕЙ ЗАРЯДНОЙ КОМНАТЫ
+-- ПЛЮС ВЫВОД НА ЭКРАН ЦВЕТНЫХ СООБЩЕНИЙ
+-- надо:комп,датчики сущностей, контроллер дверей, экран
+
+local term              = require("term")
+local com = require("component")
+local gpu               = com.gpu
+
+local computer = require("computer")
+local event = require("event").pull
+local run = true
+doorcontroller = require("component").os_doorcontroller
+local zona=4 -- область срабатывания
+local opn = true -- флаг открытия дверей
+
+local sensor = {}
+for address in com.list("os_entdetector") do
+  table.insert(sensor,com.proxy(address))
+end
+
+
+local function detector()
+  local users = {}
+  opn=true
+  for i = 1,#sensor do
+    local pl = sensor[i].scanPlayers(64)
+    for j = 1,#pl do
+
+        --print(i.." "..math.ceil(pl[j].range)..' м')
+		if math.ceil(pl[j].range)<= zona then
+		opn = false
+		end
+	 end
+  end
+ if opn == true then
+ doorcontroller.open()
+ else
+ doorcontroller.close()
+ end
+  
+  os.sleep(1)
+end
+
+
+gpu.setResolution(40, 16)
+-- отображение пустого поля
+gpu.setBackground(0x000000)
+term.clear()
+gpu.setBackground(0xFF5555)
+gpu.setForeground(0xffffff)		
+        gpu.set(12, 2, " ЗАРЯДНАЯ СТАНЦИЯ ")		
+gpu.setBackground(0x0000AA)
+        gpu.set(5, 5, "положите предмет в левый сундук")		
+gpu.setBackground(0x000000)
+        gpu.set(18, 6, "ждите")		
+gpu.setBackground(0x0000AA)
+        gpu.set(8, 7, "забирайте в правом сундуке")		
+
+gpu.setBackground(0x000000)
+gpu.setForeground(0xAAAAAA)		
+        gpu.set(2, 10, "зарядка может длиться")		
+        gpu.set(2, 11, "до 5 минут")	
+	gpu.setForeground(0xffffff)		
+        gpu.set(2, 13, "за утерянные вещи ответственность")		
+        gpu.set(7, 14, "никто не несёт, пользуйтесь")		
+        gpu.set(10, 15, "на свой страх и риск!")		
+
+ doorcontroller.open()
+ os.sleep(2)
+while run do
+pcall(detector)
+  local e = {event(1,"key_down")}
+  if e[4] == 29 then
+gpu.setResolution(160, 50)
+    os.execute("cls")
+    run = false
+    os.exit()
+  end
+end
+
+print ("stop progr")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ЗАРЯДНАЯ СТАНЦИЯ
+положите предмет в левый сундук
+ждите
+забирайте в правом сундуке
+
+зарядка может длиться
+до 15 минут
+за утерянные вещи ответственность
+никто не несёт, пользуйтесь
+на свой страх и риск!

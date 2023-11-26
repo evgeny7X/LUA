@@ -1,0 +1,37 @@
+-- ВЫВОД НА НЕСКОЛЬКО МОНИТОРОВ
+
+local com = require('component')
+
+-- создаем таблички для хранения адресов компонентов
+local gpu = {}
+local screen = {}
+local ggu={}
+
+-- получаем список видеокарт
+for address, componentType in com.list("gpu") do
+  table.insert(gpu, address)
+end
+-- получаем список мониторов (можно и вручную составить в принципе)
+for address, componentType in com.list("screen") do
+  table.insert(screen, address)
+end
+
+-- биндим попарно
+-- (контрольные проверки не делаются, поэтому, во избежание ошибок,
+-- мониторов и карт должно быть одинаковое количество)
+for number, address in pairs(gpu) do
+  com.proxy(address).bind(screen[number])
+  print(number," ",address)
+  ggu[number]=com.proxy(address)
+end
+ggu[1].setResolution(80, 25)
+ggu[1].set(1, 2, " надпись №1 ")
+ggu[2].set(1, 2, " надпись №2")
+ggu[3].set(1, 2, " надпись №3")
+local w, h = ggu[2].maxResolution()
+ggu[2].set(5, 5, tostring(w))
+ggu[2].set(5, 7, tostring(h))
+
+
+
+		

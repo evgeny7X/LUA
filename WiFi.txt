@@ -1,0 +1,20 @@
+local component = require("component")
+local event = require("event")
+local m = component.modem
+m.open(66)
+m.broadcast(66, "f1 test message oreagor tru crazy")
+end
+
+-- ============================  --
+local component = require("component")
+local event = require("event")
+local m = component.modem
+
+m.open(66)
+     while true do
+        local _, _, _, _, _, msg = event.pull("modem_message")
+		 z = tostring(msg)
+		 print z
+		 end
+		 print (z)
+	

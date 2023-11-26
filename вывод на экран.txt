@@ -1,0 +1,39 @@
+
+
+
+local term              = require("term")
+local event             = require("event")
+local component         = require("component")
+local gpu               = component.gpu
+gpu.setBackground(0x000000)
+gpu.setForeground(0xffffff)
+ 
+-- отображение пустого поля
+term.clear()
+gpu.setBackground(0x0000AA)
+
+        gpu.set(3, 15, " надпись №1")
+        gpu.set(8, 27, " надпись №2")
+gpu.setBackground(0x000000)
+gpu.setForeground(0xffaa00)
+        gpu.set(18, 20, " надпись №3")
+		
+		
+0x000000  чёрный
+0x0000AA  тёмно-синий
+0x00AA00  тёмно-зелёный
+0x00AAAA  бирюзовый
+0xAA0000  тёмно-красный
+0xAA00AA  тёмно-фиолетовый
+0xFFAA00  золотой
+0xAAAAAA  серый
+0x555555  тёмно-серый
+0x5555FF  синий
+0x55FF55  зелёный
+0x55FFFF  сине-зелёный
+0xFF5555  красный
+0xFF55FF  фиолетовый
+0xFFFF55  жёлтый
+0xFFFFFF  белый
+
+Maximum resolution: 50×16/80×25/160×50.

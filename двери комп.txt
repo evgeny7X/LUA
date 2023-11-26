@@ -1,4 +1,6 @@
---похоже нид сервер
+--ЗАКРЫТИЕ ДВЕРИ ПРИ НАХОЖДЕНИИ В КОМНАТЕ ИГРОКА
+-- надо:комп,датчики сущностей, контроллер дверей
+
 local computer = require("computer")
 local event = require("event").pull
 local com = require("component")
@@ -8,12 +10,12 @@ local zona=5 -- область срабатывания
 local opn = true -- флаг открытия дверей
 
 --if not com.isAvailable("os_entdetector") then
---error("нет сенсора entity detector")
+--error("нет детектора сущностей entity detector")
 --end
 
 local sensor = {}
---for address in com.list("os_entdetector") do
-for address in com.list("motion_sensor") do
+for address in com.list("os_entdetector") do
+--for address in com.list("motion_sensor") do
   table.insert(sensor,com.proxy(address))
 end
 
@@ -26,7 +28,7 @@ local function detector()
     local pl = sensor[i].scanPlayers(64)
     for j = 1,#pl do
 
-        print(i.." "..math.ceil(pl[j].range)..' м')
+        --print(i.." "..math.ceil(pl[j].range)..' м')
 		if math.ceil(pl[j].range)<= zona then
 		opn = false
 		end
