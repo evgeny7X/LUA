@@ -4,7 +4,7 @@
 обмен руды_v1.txt
 redstone.txt
 statist2.txt
-FTM.txt                    футы в метры
+FTM.txt                    футы в метры.
 WiFi.txt
 inventar.txt
 вывод на экран.txt
