@@ -1,0 +1,65 @@
+local component = require("component")
+local event = require("event")
+local computer = require("computer") 
+local mt = component.motion_sensor -- датчик движения
+
+local sens=40 -- чувствительность датчика
+sp = {"_"} -- список посетителей
+flag = false -- флаг наличия имени в списке
+mt.setSensitivity(sens) -- установить чувствительность сенсора
+
+---  функция заполнения списка ---
+function zapis(nm)
+
+flag=false
+	for i =1,#sp do
+		if sp[i] == nm then 
+			flag=true
+				if sp[i]=="_" then
+					sp[i]=nm
+					flag=false
+				end
+		end
+	end
+	if flag==false then 
+		sp[#sp+1]=nm
+		computer.beep(1000,0.3)
+	end
+end
+
+---  функция вывода списка на экран  ---
+function ekran()
+	for i = 1, #sp do
+	--print (i , sp[i])
+	end
+end
+
+
+
+
+---  ТЕЛО ПРОГРАММЫ  ---
+print ("   ,   ,")
+print ("  /////|")
+print (" ///// |   Statistic")
+print ("|~~~|  |    GUEST")
+print ("|===|  |")
+print ("|R  |  |")
+print ("| G |  |   (R) oreagor")
+print ("|  R| /")
+print ("|===|/")
+print ("'---'")
+print ("Start code *** sens->",mt.getSensitivity())
+while true do
+local e = {event.pull()}
+	print("llkl",e[1],e[6])
+	if e[1] == "motion" then
+	
+	--print("********* sens *********** !!!")
+	zapis(e[6])
+		if flag== false then
+		 ekran()
+		 flag = true
+		end
+
+	end
+end

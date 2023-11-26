@@ -1,0 +1,177 @@
+--БИРЖА ОБМЕНА РУДЫ НА СЛИТКИ
+
+local term              = require("term")
+local com 				= require("component")
+
+local tr = require"component".transposer
+
+local slitki={"Iron Ingot","Copper Ingot","Tin Ingot","Gold Ingot","Nickel Ingot","Lead Ingot"}
+local bloki={"Block of Iron","Block of Copper","Block of Tin","Block of Gold","Block of Nickel","Block of Lead"}
+
+local ru={"Iron Ore","Copper Ore","Tin Ore","Gold Ore","Nickel Ore","Lead Ore"}
+local ruru={"железо","медь","олово","золото","никелЬ","свинец","серебро","платина"}
+
+local rud={{}} -- сундук клиента
+local ruda={} -- руда в сундуке клиента
+local trade={{}} -- рассчет оплаты
+
+
+local red = require"component".redstone
+red.setOutput(2,15) -- поршни закрыть
+
+os.sleep(2)
+-- создаём двухмерный массив 108х6=0
+for i=1,110 do
+rud[i]={}
+	for j=1,7 do
+		rud[i][j]=0
+		ruda[j]=0
+		trade[j]={}
+		for e=1,4 do -- два ресурса на оплату (слитки и блоки)=4
+		trade[j][e]=0
+		end
+	end
+end
+print("strt")
+
+local function piston(flag)
+	if flag==true then
+		red.setOutput(2,15) -- поршни закрыть	
+		else
+		red.setOutput(2,0) -- поршни открыть
+	end
+end
+
+local function scan_chest()
+local stacks = tr.getAllStacks( 2)
+	if stacks then
+	  stacks=stacks.getAll()  
+		for slot=1, #stacks do
+		local stack = stacks[slot]
+			if stack.size>0 then
+				for e=1,#ru do
+					if stack.label==ru[e] then--ru[e] then
+					rud[slot][e]=stack.size
+					ruda[e]=ruda[e]+stack.size
+					end
+				end
+			end
+		end
+	end
+end
+
+local function preiscurant()
+-- 1=слитки 2=блоки 3=слитки+ 4=блоки+
+	trade[1][1]=ruda[1]*4	-- слитки
+	trade[1][2]=0			-- БЛОКИ
+	trade[1][3]=ruda[1]		--	+никелЬ слитки
+	trade[1][4]=0			-- +БЛОКИ
+	trade[2][1]=ruda[2]*4	-- слитки
+	trade[2][2]=0			-- БЛОКИ
+	trade[2][3]=ruda[2]		--	+.. слитки
+	trade[2][4]=0			-- +БЛОКИ
+	trade[3][1]=ruda[3]*4	-- слитки
+	trade[3][2]=0			-- БЛОКИ
+	trade[3][3]=ruda[3]		--	+.. слитки
+	trade[3][4]=0			-- +БЛОКИ
+	trade[4][1]=ruda[4]*4	-- слитки
+	trade[4][2]=0			-- БЛОКИ
+	trade[4][3]=ruda[4]		--	+.. слитки
+	trade[4][4]=0			-- +БЛОКИ
+	trade[5][1]=ruda[5]*4	-- слитки
+	trade[5][2]=0			-- БЛОКИ
+	trade[5][3]=ruda[5]		--	+.. слитки
+	trade[5][4]=0			-- +БЛОКИ
+	trade[6][1]=ruda[6]*4	-- слитки
+	trade[6][2]=0			-- БЛОКИ
+	trade[6][3]=ruda[6]		--	+.. слитки
+	trade[6][4]=0			-- +БЛОКИ
+
+	
+	
+	
+	for i=1,6 do
+	trade[i][2]=(trade[i][1]-(trade[i][1]%9))/9
+	trade[i][1]=trade[i][1]%9
+	trade[i][4]=(trade[i][3]-(trade[i][3]%9))/9
+	trade[i][3]=trade[i][3]%9
+
+	end
+
+end
+
+
+
+
+
+
+
+
+
+local function ekran()
+print(" вывод на экран ",rud[1][2])
+	for i=1,6 do
+		--for h1,z1 in ipairs(rud[i]) do  
+					--print(i,"21",h1,z1)
+		--end
+	print(i,ruda[i]," РУДЫ = ",trade[i][1]," слитки, ",trade[i][2]," БЛОКИ")
+	end
+print(" 111 ")
+end
+
+scan_chest()
+print(" scan_chest=ok ")
+preiscurant()
+print(" preiscurant=ok ")
+ekran()
+
+print(" end ")
+
+
+
+
+
+
+local trans = {}
+for address in com.list("transposer") do
+--for address in com.list("motion_sensor") do
+  table.insert(trans,com.proxy(address))
+  i=i+1
+  print(i)
+end
+
+
+
+for i=0,5 do
+print("STORONA ",i," =" ,red.getInput(i))
+red.setOutput(i,0)
+end
+
+
+
+
+print(300%64, (300-300%64)/64)
+
+
+
+
+
+-- 1 = железо
+-- 2 = медь
+-- 3 = олово
+-- 4 = золото
+-- 5 = никель
+-- 6 = свинец
+-- 7 = 
+
+
+
+-- 0 = <рассчёт>
+-- 2 = поршни
+-- 4 = ок
+-- 5 = отмена
+
+-- 2 = сундук с рудой == север
+-- 3 = буфер == юг
+-- 5 = буфер == восток
+-- 4 = сундук == запад
