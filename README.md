@@ -16,9 +16,9 @@ statist.txt<br>
 LUA scripts.txt<br>
 DOOR.txt<br>
 двери комп.txt<br>
-baton1.txt      ---    робот, летает по кругу<br>
+baton1.txt      ---   робот робот, летает по кругу<br>
 зарядная комната.txt   ---       при наличии игрока в комнате закрывает двери<br>
-arts.txt<br> --- ASCII Картинки
+arts.txt --- ASCII Картинки<br>
 варп.txt<br>
 биржа.txt   ---                   обменник руды на слитки (продвинутый комплекс)<br>
 snake2.png<br>
